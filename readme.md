@@ -15,3 +15,9 @@ export USERNAME_MONGO_ATLAS=username
 #### then
 
 `python server.py`
+
+#### Docker
+
+`docker build -t image_name:<tag_or_version> . `
+
+dont forget dot in end of syntax

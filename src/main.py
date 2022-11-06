@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Response, Cookie
+from typing import Union
 from . import auth
 from . import schemas
 import certifi
 import os
-
+from datetime import datetime, timedelta
 
 # Mongo related imports
 import pymongo
@@ -34,6 +35,7 @@ app = FastAPI(title="Tech With Rama",
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost",
+    "http://localhost:3000",
     "https://example.com",
 ]
 app.add_middleware(
@@ -47,6 +49,7 @@ app.add_middleware(
 # Auth Handler and Wrapper 
 auth_handler = auth.AuthHandler()
 auth_wrapper = auth_handler.auth_wrapper
+auth_wrapper_secure = auth_handler.auth_wrapper_secure
 
 @app.get("/")
 async def home():
@@ -79,6 +82,23 @@ async def login(auth_details: schemas.AuthDetailsRequest):
     token = auth_handler.encode_token(user['username'])
     return { 'token': token }
 
+# Secure login use for front end to backend
+@app.post('/secure-login')
+async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Response):
+    user = users_col.find_one({"username": auth_details.username})
+    # if user not found, or password is not correct
+    if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
+        raise HTTPException(status_code=401, detail='Invalid username and/or password')
+    token = auth_handler.encode_token(user['username'])
+    response.set_cookie(key='token', value=token, httponly=True, samesite='none', max_age=timedelta(minutes=30))
+    return { 'message': "login success" }
+
+# protected routes using wrapper http only cookies
+@app.get("/protected-http-only-cookies")
+async def protected_cookes(token=Depends(auth_wrapper_secure)):
+    return {"token": token}
+# End of secure login
+
 
 @app.get('/unprotected',name="unprotected routes", tags=["Protected Routes"])
 async def unprotected():
@@ -99,5 +119,3 @@ async def example_path(example_string: str):
 # has default value 0 and 10, 
 async def read_item(skip: int = 0, limit: int = 10, username=Depends(auth_wrapper)):
     return {"skip": skip, "limit": limit, "username": username}
-
-

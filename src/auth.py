@@ -1,15 +1,15 @@
 from jose import jwt
-from fastapi import HTTPException, Security
+from fastapi import HTTPException, Security, Cookie
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
+secret_string = 'SECRET'
 
 class AuthHandler():
     security = HTTPBearer()
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    secret = 'SECRET'
-
+    secret = secret_string
     def get_password_hash(self, password):
         return self.pwd_context.hash(password)
 
@@ -32,9 +32,26 @@ class AuthHandler():
         try:
             decoded_payload = jwt.decode(token, self.secret, algorithms=['HS256'])
             return decoded_payload
-            
+
         except:
             raise HTTPException(status_code=401, detail='Invalid token')
 
     def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
         return self.decode_token(auth.credentials)
+    
+    def auth_wrapper_secure(self, token: str = Cookie(None)):
+        print(token)
+        return self.decode_token(token)
+
+# class AuthCookieHandler():
+#     secret = secret_string
+#     def decode_token(self, token):
+#         try:
+#             decoded_payload = jwt.decode(token, self.secret, algorithms=['HS256'])
+#             return decoded_payload
+#         except:
+#             raise HTTPException(status_code=401, detail='Invalid token')
+#     def auth_wrapper(self, token: str = Cookie(None)):
+#         print(token)
+#         return self.decode_token(token)
+    
