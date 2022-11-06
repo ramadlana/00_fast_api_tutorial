@@ -2,10 +2,15 @@ from fastapi import FastAPI, Depends, HTTPException
 from . import auth
 from . import schemas
 import certifi
+import os
+
 
 # Mongo related imports
 import pymongo
-client = pymongo.MongoClient("mongodb+srv://techWithRama:XVlPSyqYedwOTTkh@cluster0.frjb9h5.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+mongouser = os.environ.get("USERNAME_MONGO_ATLAS")
+mongopass = os.environ.get("PASSWORD_MONGO_ATLAS")
+mongostring = os.environ.get("STRING_URI_MONGO")
+client = pymongo.MongoClient(f'mongodb+srv://{mongouser}:{mongopass}@{mongostring}', tlsCAFile=certifi.where())
 db = client.db_tutorial
 users_col = db.col_users
 
