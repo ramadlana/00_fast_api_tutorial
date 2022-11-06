@@ -1,6 +1,4 @@
 from fastapi import FastAPI, Depends, HTTPException
-from pydantic import BaseModel
-from typing import Union
 from . import auth
 from . import schemas
 
@@ -46,7 +44,7 @@ auth_wrapper = auth_handler.auth_wrapper
 
 # use schema for return in swager and redoc using responses property
 @app.post('/register',name="Register user",tags=["Auth"], description="create new users", responses={**schemas.custom_response_schema_1})
-async def register(auth_details: schemas.AuthDetails):
+async def register(auth_details: schemas.AuthDetailsRequest):
     # check if username is exist
     if users_col.find_one({"username": auth_details.username}) != None:
         raise HTTPException(status_code=400, detail='Username is taken')
@@ -63,7 +61,7 @@ async def register(auth_details: schemas.AuthDetails):
 
 
 @app.post('/login', name="Login user to get Token", tags=["Auth"])
-async def login(auth_details: schemas.AuthDetails):
+async def login(auth_details: schemas.AuthDetailsRequest):
     user = users_col.find_one({"username": auth_details.username})
     # if user not found, or password is not correct
     if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
@@ -72,12 +70,12 @@ async def login(auth_details: schemas.AuthDetails):
     return { 'token': token }
 
 
-@app.get('/unprotected',name="unprotected routes", tags=["Example Protected / Unprotected"])
+@app.get('/unprotected',name="unprotected routes", tags=["Protected Routes"])
 async def unprotected():
     return { 'hello': 'world' }
 
 # Protected
-@app.get('/protected', tags=["Example Protected / Unprotected"])
+@app.get('/protected', tags=["Protected Routes"], description="Use login to get token", responses={**schemas.custom_response_schema_1})
 async def protected(username=Depends(auth_wrapper)):
     return { 'name': username }
 

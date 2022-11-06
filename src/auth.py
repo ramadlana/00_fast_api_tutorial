@@ -32,7 +32,7 @@ class AuthHandler():
         try:
             decoded_payload = jwt.decode(token, self.secret, algorithms=['HS256'])
             return decoded_payload
-
+            
         except:
             raise HTTPException(status_code=401, detail='Invalid token')
 

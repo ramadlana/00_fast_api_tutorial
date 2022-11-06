@@ -2,63 +2,82 @@ from pydantic import BaseModel
 from typing import Union
 
 
-class AuthDetails(BaseModel):
-    username: str
-    password: str
+# for request Auth model
+class AuthDetailsRequest(BaseModel):
+    username: str = "your_username"
+    password: str = "your_password"
     role: Union[str,int, None] = None
 
 # custom model for open api response docs
-class ExampleResponseModel(BaseModel):
-    foo: Union[str, None]
+class AuthDetailsResponse(BaseModel):
     message: Union[str, None]
+class SchemaError4xx(BaseModel):
+    detail: str
 
-# custom open api responses
+# custom open api responses (for swagger)
 custom_response_schema_1 = {
-    201: {
-        "model": ExampleResponseModel,
+    200: {
+        "model": AuthDetailsResponse,
         "description": "Successfully created",
         "content": {
             "application/json": {
                 "example": {
-                    "status": "ok",
+                    "message": "successfully created"
+                }
+            }
+        }
+    },
+    201: {
+        "model": AuthDetailsResponse,
+        "description": "Successfully created",
+        "content": {
+            "application/json": {
+                "example": {
+                    "message": "successfully created"
+                }
+            }
+        }
+    },
+    302: {
+        "model": AuthDetailsResponse, 
+        "description": "The item was moved",
+        "content": {
+            "application/json": {
+                "example": {
                     "message": "successfully created"
                 }
             }
         }
     },
     403: {
-        "model": ExampleResponseModel,
+        "model": SchemaError4xx,
         "description": "Not Authorized",
         "content": {
             "application/json": {
                 "example": {
-                    "status": "Error",
-                    "message": "Not Authorized"
+                    "detail": "Not Authorized"
                 }
             }
         }
     },
     404: {
-        "model": ExampleResponseModel,
+        "model": SchemaError4xx,
         "description": "Item Not Found",
         "content": {
             "application/json": {
                 "example": {
-                    "foo": "bar",
-                    "message": "username not found"
+                    "detail": "username not found"
                 }
             }
         }
     },
-    302: {"model": ExampleResponseModel,"description": "The item was moved"},
     400: {
-         "model": ExampleResponseModel,
+         "model": SchemaError4xx,
         "description": "username already taken",
         "content": {
             "application/json": {
                 "example": {
-                    "foo": "bar",
-                    "message": "sorry username already taken."
+                    "detail": "sorry username already taken."
                 }
             }
         }
