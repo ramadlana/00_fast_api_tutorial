@@ -4,7 +4,7 @@ from . import schemas
 
 # Mongo related import
 import pymongo
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient("mongodb://db:27017/")
 db = client.db_tutorial
 users_col = db.col_users
 
