@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 COPY . .
 
 # 
-CMD ["python","server.py"]
+CMD ["python3","server.py"]
