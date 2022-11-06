@@ -2,7 +2,7 @@
 
 run test
 
-`pytest`
+`pytest --no-header -v --disable-warnings`
 
 then
 
