@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from . import auth
 from . import schemas
+import certifi
 
 # Mongo related import
 import pymongo
-client = pymongo.MongoClient("mongodb://db:27017/")
+client = pymongo.MongoClient("mongodb+srv://techWithRama:XVlPSyqYedwOTTkh@cluster0.frjb9h5.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
 db = client.db_tutorial
 users_col = db.col_users
 
