@@ -91,7 +91,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
         raise HTTPException(status_code=401, detail='Invalid username and/or password')
     token = auth_handler.encode_token(user['username'])
-    response.set_cookie(key='token', value=token, httponly=True,domain="https://3545-115-178-194-222.ap.ngrok.io", samesite='none', max_age=timedelta(minutes=30))
+    response.set_cookie(key='token', value=token, httponly=True,domain="https://3545-115-178-194-222.ap.ngrok.io", samesite='none', expires=100000*60)
     return { 'message': "login success" }
 
 # protected routes using wrapper http only cookies
