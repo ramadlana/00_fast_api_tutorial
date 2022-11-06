@@ -6,7 +6,7 @@ import certifi
 import os
 from datetime import datetime, timedelta
 
-# Mongo related imports
+# Mongo related import
 import pymongo
 mongouser = os.environ["USERNAME_MONGO_ATLAS"]
 mongopass = os.environ["PASSWORD_MONGO_ATLAS"]
