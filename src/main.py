@@ -7,9 +7,10 @@ import os
 
 # Mongo related imports
 import pymongo
-mongouser = os.environ.get("USERNAME_MONGO_ATLAS")
-mongopass = os.environ.get("PASSWORD_MONGO_ATLAS")
-mongostring = os.environ.get("STRING_URI_MONGO")
+mongouser = os.environ["USERNAME_MONGO_ATLAS"]
+mongopass = os.environ["PASSWORD_MONGO_ATLAS"]
+mongostring = os.environ["STRING_URI_MONGO"]
+
 client = pymongo.MongoClient(f'mongodb+srv://{mongouser}:{mongopass}@{mongostring}', tlsCAFile=certifi.where())
 db = client.db_tutorial
 users_col = db.col_users
@@ -34,7 +35,6 @@ from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost",
     "https://example.com",
-    "*"
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -47,6 +47,10 @@ app.add_middleware(
 # Auth Handler and Wrapper 
 auth_handler = auth.AuthHandler()
 auth_wrapper = auth_handler.auth_wrapper
+
+@app.get("/")
+async def home():
+    return {"message": "home"}
 
 # use schema for return in swager and redoc using responses property
 @app.post('/register',name="Register user",tags=["Auth"], description="create new users", responses={**schemas.custom_response_schema_1})
