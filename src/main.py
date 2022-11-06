@@ -37,6 +37,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "https://example.com",
+    "https://3545-115-178-194-222.ap.ngrok.io/",
 ]
 app.add_middleware(
     CORSMiddleware,
