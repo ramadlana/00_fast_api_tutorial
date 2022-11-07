@@ -18,6 +18,15 @@ steps:
         "--project=rama-lab",
       ]
   - name: "gcr.io/cloud-builders/gcloud"
-    args: ["run", "services", "update-traffic", "fastapi", "--to-latest"]
+    args:
+      [
+        "run",
+        "services",
+        "update-traffic",
+        "fastapi",
+        "--to-latest",
+        "--region=asia-southeast2",
+        "--project=rama-lab",
+      ]
 images:
   - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial
