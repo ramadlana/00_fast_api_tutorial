@@ -16,7 +16,7 @@ users_col = db.col_users
 # APP
 app = FastAPI(title="Tech With Rama",
     description="Open Api using python and fastapi",
-    version="1.0.5",
+    version="1.0.6",
     terms_of_service="http://example.com/terms/",
     contact={
         "name": "Tech With Rama",
