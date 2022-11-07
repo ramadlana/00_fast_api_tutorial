@@ -33,3 +33,6 @@ steps:
         "--to-latest",
         "--region=asia-southeast2",
       ]
+
+images:
+  - gcr.io/cloud-builders/gcloud
