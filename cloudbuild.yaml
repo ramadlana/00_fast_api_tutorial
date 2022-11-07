@@ -3,10 +3,8 @@ steps:
     args:
       [
         "docker build",
-        "-t",
+        "tag",
         "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
-        "-f",
-        "Dockerfile",
         ".",
       ]
   - name: "gcr.io/cloud-builders/gcloud"
