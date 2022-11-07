@@ -1,37 +1,27 @@
 steps:
-  - name: 'Build Image'
+  - name: "Build Image"
     args:
       [
-       'docker build',
-       '-t gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix',
-       '-f Dockerfile'
-    .
+        "docker build",
+        "-t gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
+        "-f Dockerfile",
+        ".",
       ]
-  - name: 'Push Image'
+  - name: "Push Image"
+    args:
+      ["push", "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix"]
+  - name: "Deploy"
     args:
       [
-        'push',
-        'gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix',
+        "run",
+        "deploy",
+        "fastapi",
+        "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
+        "--region=asia-southeast2",
+        "--project=rama-lab",
       ]
-  - name: 'Deploy'
+  - name: "Run"
     args:
-      [
-        'run',
-        'deploy',
-        'fastapi',
-        '--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix',
-        '--region=asia-southeast2',
-        '--project=rama-lab',
-      ]
-  - name: 'Run'
-    args:
-      [
-        'gcloud',
-        'run',
-        'services',
-        'update-traffic',
-        'fastapi',
-        '--to-latest',
-      ]
+      ["gcloud", "run", "services", "update-traffic", "fastapi", "--to-latest"]
 images:
   - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial
