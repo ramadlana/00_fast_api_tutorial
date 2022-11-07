@@ -8,10 +8,13 @@ steps:
         "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
         ".",
       ]
+
   - name: "gcr.io/cloud-builders/docker"
     id: "push"
+    waitFor: ["build"]
     args:
       ["push", "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix"]
+
   - name: "gcr.io/cloud-builders/gcloud"
     id: "deploy"
     waitFor: ["build"]
@@ -27,7 +30,7 @@ steps:
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "runservice"
-    waitFor: ["build", "deploy"]
+    waitFor: ["deploy"]
     args:
       [
         "run",
