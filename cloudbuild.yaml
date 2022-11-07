@@ -35,4 +35,4 @@ steps:
       ]
 
 images:
-  - gcr.io/cloud-builders/gcloud
+  - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:staging
