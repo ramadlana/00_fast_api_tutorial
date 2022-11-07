@@ -8,18 +8,15 @@ from datetime import datetime, timedelta
 
 # Mongo related import
 import pymongo
-mongouser = os.environ["USERNAME_MONGO_ATLAS"]
-mongopass = os.environ["PASSWORD_MONGO_ATLAS"]
-mongostring = os.environ["STRING_URI_MONGO"]
-
-client = pymongo.MongoClient(f'mongodb+srv://{mongouser}:{mongopass}@{mongostring}', tlsCAFile=certifi.where())
+MONGO_SERVER_STRING = os.environ["MONGO_SERVER_STRING"]
+client = pymongo.MongoClient(MONGO_SERVER_STRING)
 db = client.db_tutorial
 users_col = db.col_users
 
 # APP
 app = FastAPI(title="Tech With Rama",
     description="Open Api using python and fastapi",
-    version="1.0.2",
+    version="1.0.3",
     terms_of_service="http://example.com/terms/",
     contact={
         "name": "Tech With Rama",
@@ -91,7 +88,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
         raise HTTPException(status_code=401, detail='Invalid username and/or password')
     token = auth_handler.encode_token(user['username'])
-    response.set_cookie(key='token', value=token, httponly=True,domain=".ngrok.io", max_age=18000, expires=18000, samesite='None',secure=True)
+    response.set_cookie(key='token', value=token, httponly=True,domain=".ngrok.io", max_age=18000, expires=18000, samesite='None',secure=False)
     return { 'message': "login success" }
 
 # protected routes using wrapper http only cookies

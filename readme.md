@@ -3,9 +3,7 @@
 Export Env Variable, or set on cloud provider
 
 ```
-export STRING_URI_MONGO="url_here"
-export PASSWORD_MONGO_ATLAS=password
-export USERNAME_MONGO_ATLAS=username
+export MONGO_SERVER_STRING="mongodb://xxxx"
 ```
 
 #### Run test
