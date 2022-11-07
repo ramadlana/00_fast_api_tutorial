@@ -5,7 +5,7 @@ steps:
       [
         "build",
         "-t",
-        "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:staging",
+        "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
         ".",
       ]
   - name: "gcr.io/cloud-builders/gcloud"
@@ -16,7 +16,7 @@ steps:
         "run",
         "deploy",
         "fastapi",
-        "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:staging",
+        "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
         "--region=asia-southeast2",
         "--project=rama-lab",
       ]
@@ -33,6 +33,5 @@ steps:
         "--to-latest",
         "--region=asia-southeast2",
       ]
-
 images:
-  - gcr.io/rama-lab/github.com/ramadlana
+  - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix
