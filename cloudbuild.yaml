@@ -1,5 +1,6 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
+    id: "build"
     args:
       [
         "build",
@@ -8,6 +9,8 @@ steps:
         ".",
       ]
   - name: "gcr.io/cloud-builders/gcloud"
+    waitFor: "build"
+    id: "deploy"
     args:
       [
         "run",
@@ -17,7 +20,9 @@ steps:
         "--region=asia-southeast2",
         "--project=rama-lab",
       ]
+
   - name: "gcr.io/cloud-builders/gcloud"
+    waitFor: "deploy"
     args:
       [
         "run",
