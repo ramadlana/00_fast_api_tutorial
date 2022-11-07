@@ -3,7 +3,6 @@ from typing import Union
 from . import auth
 from . import schemas
 import os
-from datetime import datetime, timedelta
 
 # Mongo related import
 import pymongo
@@ -13,12 +12,12 @@ db = client.db_tutorial
 users_col = db.col_users
 
 # APP
-app = FastAPI(title="Tech With Rama",
+app = FastAPI(title="Lingkar Academy",
     description="Open Api using python and fastapi",
     version="2.0.0",
     terms_of_service="http://example.com/terms/",
     contact={
-        "name": "Tech With Rama",
+        "name": "Lingkar Academy",
         "url": "https://netventura.com",
         "email": "hidayahweb@gmail.com",
     },
@@ -69,7 +68,7 @@ async def register(auth_details: schemas.AuthDetailsRequest):
     })
     return {"message": "successfully created"}
 
-
+# Login to get Token
 @app.post('/login', name="Login user to get Token", tags=["Auth"])
 async def login(auth_details: schemas.AuthDetailsRequest):
     user = users_col.find_one({"username": auth_details.username})
@@ -79,6 +78,31 @@ async def login(auth_details: schemas.AuthDetailsRequest):
     token = auth_handler.encode_token(user['username'])
     return { 'token': token }
 
+# Path | Path is variable url 
+@app.get('/itemsdetail/{example_string}')
+async def example_path(example_string: str):
+    return {'message': example_string}
+
+#Query | Query is on url after question mark: http://127.0.0.1:8000/items/?skip=0&limit=10
+@app.get("/items/",name="get query",tags=["Others"], description="get query",  responses={**schemas.custom_response_schema_1})
+# has default value 0 and 10, 
+async def read_item(skip: int = 0, limit: int = 10, username=Depends(auth_wrapper)):
+    return {"skip": skip, "limit": limit, "username": username}
+
+# Un Protected Routes
+@app.get('/unprotected',name="unprotected routes", tags=["Protected Routes"])
+async def unprotected():
+    return { 'hello': 'world' }
+
+# Protected Routes
+@app.get('/protected', tags=["Protected Routes"], description="Use login to get token", responses={**schemas.custom_response_schema_1})
+async def protected(username=Depends(auth_wrapper)):
+    return { 'name': username }
+
+
+
+
+### End ##
 # Secure login use for front end to backend
 @app.post('/secure-login')
 async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Response):
@@ -95,24 +119,3 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
 async def protected_cookes(token=Depends(auth_wrapper_secure)):
     return {"token": token}
 # End of secure login
-
-
-@app.get('/unprotected',name="unprotected routes", tags=["Protected Routes"])
-async def unprotected():
-    return { 'hello': 'world' }
-
-# Protected
-@app.get('/protected', tags=["Protected Routes"], description="Use login to get token", responses={**schemas.custom_response_schema_1})
-async def protected(username=Depends(auth_wrapper)):
-    return { 'name': username }
-
-# Path | Path is variable url 
-@app.get('/itemsdetail/{example_string}')
-async def example_path(example_string: str):
-    return {'message': example_string}
-
-#Query | Query is on url after question mark: http://127.0.0.1:8000/items/?skip=0&limit=10
-@app.get("/items/",name="get query",tags=["Others"], description="get query",  responses={**schemas.custom_response_schema_1})
-# has default value 0 and 10, 
-async def read_item(skip: int = 0, limit: int = 10, username=Depends(auth_wrapper)):
-    return {"skip": skip, "limit": limit, "username": username}
