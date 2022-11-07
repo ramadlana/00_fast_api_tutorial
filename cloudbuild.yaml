@@ -2,7 +2,8 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "docker build",
+        "docker",
+        "build",
         "tag",
         "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
         ".",
