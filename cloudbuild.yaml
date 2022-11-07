@@ -5,7 +5,7 @@ steps:
       [
         "build",
         "-t",
-        "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
+        "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:$SHORT_SHA",
         ".",
       ]
 
@@ -13,7 +13,10 @@ steps:
     id: "push"
     waitFor: ["build"]
     args:
-      ["push", "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix"]
+      [
+        "push",
+        "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:$SHORT_SHA",
+      ]
 
   - name: "gcr.io/cloud-builders/gcloud"
     id: "deploy"
@@ -23,7 +26,7 @@ steps:
         "run",
         "deploy",
         "fastapi",
-        "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
+        "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:$SHORT_SHA",
         "--region=asia-southeast2",
         "--project=rama-lab",
       ]
