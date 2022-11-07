@@ -8,7 +8,8 @@ from datetime import datetime, timedelta
 secret_string = 'SECRET'
 
 class AuthHandler():
-    security = HTTPBearer()
+    # Auth Handler HTTP Bearer / Token Based Authorization
+    http_bearer_open_api = HTTPBearer()
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     secret = secret_string
     def get_password_hash(self, password):
@@ -19,7 +20,7 @@ class AuthHandler():
 
     def encode_token(self, user_id):
         payload = {
-            'exp': datetime.utcnow() + timedelta(days=0, minutes=60, seconds=10),
+            'exp': datetime.utcnow() + timedelta(days=0, hours=1, minutes=30, seconds=5),
             'iat': datetime.utcnow(),
             'username': user_id
         }
@@ -38,9 +39,10 @@ class AuthHandler():
         except:
             raise HTTPException(status_code=401, detail='Invalid token')
 
-    def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+    def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(http_bearer_open_api)):
         return self.decode_token(auth.credentials)
     
     def auth_wrapper_secure(self, token: str = Cookie(None)):
         print(token)
         return self.decode_token(token)
+    

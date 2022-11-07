@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Depends, HTTPException, Response, Cookie
-from typing import Union
 from . import auth
 from . import schemas
 import os
@@ -13,27 +12,28 @@ db = client.db_tutorial
 users_col = db.col_users
 
 # APP
-app = FastAPI(title="Lingkar Academy",
-    description="Open Api using python and fastapi",
+app = FastAPI(
+    redoc_url="/redoc", # set to None to disable
+    docs_url="/doc", # set to None to disable
+    title="Lingkar Academy",
+    description="Tutorial Open-Api backend using python and fastapi",
     version="2.0.0",
     terms_of_service="http://example.com/terms/",
     contact={
         "name": "Lingkar Academy",
         "url": "https://netventura.com",
-        "email": "hidayahweb@gmail.com",
+        "email": "lingkar.academy@gmail.com",
     },
     license_info={
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-    },)
+    }
+)
 
 # CORS
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost",
-    "http://localhost:3000",
-    "https://example.com",
-    "https://3545-115-178-194-222.ap.ngrok.io",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -48,7 +48,7 @@ auth_handler = auth.AuthHandler()
 auth_wrapper = auth_handler.auth_wrapper
 auth_wrapper_secure = auth_handler.auth_wrapper_secure
 
-@app.get("/")
+@app.get("/", tags=["Public"])
 async def home():
     return {"message": "home"}
 
@@ -77,21 +77,23 @@ async def login(auth_details: schemas.AuthDetailsRequest):
     if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
         raise HTTPException(status_code=401, detail='Invalid username and/or password')
     token = auth_handler.encode_token(user['username'])
+    # abz = auth.AuthHandler
+    # token = abz.encode_token(user['username'])
     return { 'token': token }
 
 # Path | Path is variable url 
-@app.get('/itemsdetail/{example_string}')
+@app.get('/itemsdetail/{example_string}', tags=["Url Vars"])
 async def example_path(example_string: str):
     return {'message': example_string}
 
 #Query | Query is on url after question mark: http://127.0.0.1:8000/items/?skip=0&limit=10
-@app.get("/items/",name="get query",tags=["Others"], description="get query",  responses={**schemas.custom_response_schema_1})
+@app.get("/items/",name="get query",tags=["Url Vars"], description="get query",  responses={**schemas.custom_response_schema_1})
 # has default value 0 and 10, 
-async def read_item(skip: int = 0, limit: int = 10, username=Depends(auth_wrapper)):
-    return {"skip": skip, "limit": limit, "username": username}
+async def read_item(skip: int = 0, limit: int = 10):
+    return {"skip": skip, "limit": limit}
 
 # Un Protected Routes
-@app.get('/unprotected',name="unprotected routes", tags=["Protected Routes"])
+@app.get('/unprotected',name="unprotected routes", tags=["Public"])
 async def unprotected():
     return { 'hello': 'world' }
 
@@ -105,7 +107,7 @@ async def protected(username=Depends(auth_wrapper)):
 
 ### End ##
 # Secure login use for front end to backend
-@app.post('/secure-login')
+@app.post('/secure-login', tags=["Cookies Based"])
 async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Response):
     user = users_col.find_one({"username": auth_details.username})
     # if user not found, or password is not correct
@@ -116,7 +118,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     return { 'message': "login success" }
 
 # protected routes using wrapper http only cookies
-@app.get("/protected-http-only-cookies")
+@app.get("/protected-http-only-cookies", tags=["Cookies Based"])
 async def protected_cookes(token=Depends(auth_wrapper_secure)):
     return {"token": token}
 # End of secure login
