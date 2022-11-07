@@ -29,7 +29,7 @@ steps:
       ]
 
   - name: "gcr.io/cloud-builders/gcloud"
-    id: "runservice"
+    id: "update-traffic"
     waitFor: ["deploy"]
     args:
       [
