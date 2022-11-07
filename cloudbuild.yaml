@@ -8,6 +8,10 @@ steps:
         "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix",
         ".",
       ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push"
+    args:
+      ["push", "gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix"]
   - name: "gcr.io/cloud-builders/gcloud"
     id: "deploy"
     waitFor: ["build"]
@@ -33,5 +37,3 @@ steps:
         "--to-latest",
         "--region=asia-southeast2",
       ]
-images:
-  - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:fix
