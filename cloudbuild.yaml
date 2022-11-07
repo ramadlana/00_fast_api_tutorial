@@ -9,8 +9,8 @@ steps:
         ".",
       ]
   - name: "gcr.io/cloud-builders/gcloud"
+    id: ["deploy"]
     waitFor: "build"
-    id: "deploy"
     args:
       [
         "run",
@@ -22,7 +22,8 @@ steps:
       ]
 
   - name: "gcr.io/cloud-builders/gcloud"
-    waitFor: "deploy"
+    id: "runservice"
+    waitFor: ["deploy"]
     args:
       [
         "run",
