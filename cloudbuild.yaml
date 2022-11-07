@@ -35,4 +35,4 @@ steps:
       ]
 
 images:
-  - gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:staging
+  - gcr.io/rama-lab/github.com/ramadlana
