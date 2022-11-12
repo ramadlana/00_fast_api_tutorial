@@ -4,7 +4,7 @@ from . import schemas
 import os
 import certifi
 
-# Mongo related import
+# Mongo related imports
 import pymongo
 MONGO_SERVER_STRING = os.environ["MONGO_SERVER_STRING"]
 client = pymongo.MongoClient(MONGO_SERVER_STRING,tlsCAFile=certifi.where())
