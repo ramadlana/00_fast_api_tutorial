@@ -121,10 +121,11 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     response.set_cookie(
         key="token_test",
         value=token,
-        samesite='none', # in my case and probably in yours
+        httponly=True,
+        samesite='None', # in my case and probably in yours
         secure=True, # if using https and not http
         expires=60 * 60 * 24, # any number in seconds
-        domain=".netventura.com"
+        domain="fe.netventura.com"
     )
     # lax udah
     # None udah
