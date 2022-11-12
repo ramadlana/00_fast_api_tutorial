@@ -121,7 +121,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     if (user is None) or (not auth_handler.verify_password(auth_details.password, user['password'])):
         raise HTTPException(status_code=401, detail='Invalid username and/or password')
     token = auth_handler.encode_token(user['username'])
-    response.set_cookie(key='token', value=token, httponly=True,domain=".a.run.app", max_age=18000, expires=18000,secure=True, samesite='None')
+    response.set_cookie(key='token', value=token, httponly=True,domain=".run.app", max_age=18000, expires=18000,secure=True, samesite='None')
     # lax udah
     # None udah
 
