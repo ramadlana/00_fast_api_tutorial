@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
 # 
 COPY . .
-
+#expose
 EXPOSE 80
 
 # 
