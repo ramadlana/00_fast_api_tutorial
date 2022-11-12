@@ -118,7 +118,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
         raise HTTPException(status_code=401, detail='Invalid username and/or password')
     token = auth_handler.encode_token(user['username'])
     response.set_cookie(key='token', value=token, httponly=True,domain=".a.run.app", max_age=18000, expires=18000,secure=True)
-    # samesite='None'a
+    # samesite='None'
     return { 'message': "login success" }
 
 # protected routes using wrapper http only cookies
