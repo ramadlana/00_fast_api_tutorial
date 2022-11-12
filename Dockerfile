@@ -14,5 +14,7 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 # 
 COPY . .
 
+EXPOSE 80
+
 # 
 CMD ["python3","server.py"]
