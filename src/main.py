@@ -34,11 +34,15 @@ app = FastAPI(
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost",
+    "run.app"
 ]
+origins_regex = 'https://.*\.run\.app'
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
+    allow_origin_regex=origins_regex,
     allow_methods=["*"],
     allow_headers=["*"],
 )
