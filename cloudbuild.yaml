@@ -27,6 +27,9 @@ steps:
         "deploy",
         "fastapi",
         "--image=gcr.io/rama-lab/github.com/ramadlana/00_fast_api_tutorial:$SHORT_SHA",
+        "--port=80",
+        "--max-instances=1",
+        "--allow-unauthenticated",
         "--region=asia-southeast2",
         "--project=rama-lab",
       ]
