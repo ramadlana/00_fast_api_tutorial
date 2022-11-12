@@ -30,7 +30,7 @@ steps:
         "--port=80",
         "--max-instances=1",
         "--allow-unauthenticated",
-        "--region=asia-southeast2",
+        "--region=us-central1",
         "--project=rama-lab",
       ]
 
@@ -44,5 +44,5 @@ steps:
         "update-traffic",
         "fastapi",
         "--to-latest",
-        "--region=asia-southeast2",
+        "--region=us-central1",
       ]
