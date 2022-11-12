@@ -39,11 +39,15 @@ origins_regex = 'https://.*\.run\.app'
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['https://reactstarterkit-7c4odlhlmq-et.a.run.app'],
     allow_credentials=True,
-    allow_origin_regex=origins_regex,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"], # include additional methods as per the application demand
+    allow_headers=["Content-Type","Set-Cookie"], # include additional
+    # allow_origins=origins,
+    # allow_credentials=True,
+    # allow_origin_regex=origins_regex,
+    # allow_methods=["*"],
+    # allow_headers=["*"],
 )
 
 # Auth Handler and Wrapper 
@@ -120,7 +124,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
     response.set_cookie(key='token', value=token, httponly=True,domain=".a.run.app", max_age=18000, expires=18000,secure=True, samesite='None')
     # lax udah
     # None udah
-    
+
     return { 'message': "login success" }
 
 # protected routes using wrapper http only cookies
