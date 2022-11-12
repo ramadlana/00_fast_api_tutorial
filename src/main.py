@@ -125,7 +125,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
         samesite='none', # in my case and probably in yours
         secure=True, # if using https and not http
         expires=60 * 60 * 24, # any number in seconds
-        domain="fe.netventura.com"
+        domain=".netventura.com"
     )
     # lax udah
     # None udah
