@@ -39,15 +39,11 @@ origins_regex = 'https://.*\.run\.app'
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['https://reactstarterkit-7c4odlhlmq-et.a.run.app'],
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"], # include additional methods as per the application demand
-    allow_headers=["Content-Type","Set-Cookie"], # include additional
-    # allow_origins=origins,
-    # allow_credentials=True,
-    # allow_origin_regex=origins_regex,
-    # allow_methods=["*"],
-    # allow_headers=["*"],
+    allow_origin_regex=origins_regex,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Auth Handler and Wrapper 
@@ -127,7 +123,7 @@ async def login_http_only(auth_details: schemas.AuthDetailsRequest, response: Re
         samesite='none', # in my case and probably in yours
         secure=True, # if using https and not http
         expires=60 * 60 * 24, # any number in seconds
-        domain="reactstarterkit-7c4odlhlmq-et.a.run.app"
+        domain="https://reactstarterkit-7c4odlhlmq-et.a.run.app"
     )
     # lax udah
     # None udah
