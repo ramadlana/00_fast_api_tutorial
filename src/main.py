@@ -34,6 +34,7 @@ app = FastAPI(
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
     "http://localhost",
+    "https://fe.netventura.com"
 ]
 origins_regex = 'https://.*\.netventura.\.com'
 
